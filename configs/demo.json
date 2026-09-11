@@ -1,0 +1,12 @@
+{
+  "include": ["suite.json"],
+  "test_time_profiling_policy": "updating",
+  "test_time_user_preferences": "drifting",
+  "budgets": {"max_submissions": 2},
+  "runtimes": {
+    "worker": {"type": "demo"},
+    "reviewer": {"type": "demo"},
+    "judge": {"type": "demo"},
+    "learner": {"type": "demo"}
+  }
+}

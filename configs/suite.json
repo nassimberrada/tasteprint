@@ -1,0 +1,35 @@
+{
+  "test_time_profiling_policy": "frozen",
+  "test_time_user_preferences": "stable",
+  "worker": {"type": "llm", "runtime": "worker"},
+  "technique": {"type": "rules", "runtime": "learner", "max_chars": 12000},
+  "budgets": {"max_submissions": 4, "max_questions": 2, "max_calls": 200, "max_seconds": 1800},
+  "users": [
+    {
+      "id": "user-a", "type": "llm", "runtime": "reviewer", "judge_runtime": "judge",
+      "persona": "A researcher who publishes clear explanations for busy colleagues.",
+      "preferences": {
+        "default": "Restrained presentation, concrete examples, plain language, explicit uncertainty.",
+        "writing": "Start with a concrete example, then explain the principle. Avoid sales language.",
+        "websites": "Generous spacing, descriptive headings, muted colors, no unnecessary animation."
+      },
+      "feedback_style": "Give at most two specific improvements per review. Explain why when asked."
+    },
+    {
+      "id": "user-b", "type": "llm", "runtime": "reviewer", "judge_runtime": "judge",
+      "persona": "An educator making science approachable for curious newcomers.",
+      "preferences": {
+        "default": "Playful, inviting presentation with concrete examples and accurate claims.",
+        "writing": "Use a vivid analogy and a friendly tone, then explain where the analogy breaks down.",
+        "websites": "Warm colors, strong visual hierarchy, a clear invitation to try something."
+      },
+      "feedback_style": "Give at most two specific improvements per review. Explain why when asked."
+    }
+  ],
+  "tasks": [
+    {"id": "explanation-a", "type": "essay", "split": "train", "brief": "Write a short essay explaining how feedback helps a research team learn. Include an example and a limitation.", "checks": {"min_words": 100, "max_words": 500, "contains": ["feedback"]}},
+    {"id": "page-a", "type": "webpage", "split": "train", "render": false, "brief": "Design a landing page for a public research workshop. Explain its purpose and include a Learn more button.", "checks": {"contains": ["research", "button"]}},
+    {"id": "explanation-b", "type": "essay", "split": "test", "brief": "Write a short essay explaining how evidence helps people revise a mistaken belief. Include an example and a limitation.", "checks": {"min_words": 100, "max_words": 500, "contains": ["evidence"]}},
+    {"id": "page-b", "type": "webpage", "split": "test", "render": false, "brief": "Design a landing page for a research reading group. Explain its purpose and include a Learn more button.", "checks": {"contains": ["research", "button"]}}
+  ]
+}

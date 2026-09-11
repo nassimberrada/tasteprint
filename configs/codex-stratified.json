@@ -1,0 +1,18 @@
+{
+  "include": ["suite.json"],
+  "mode": "mcp",
+  "technique": {"type": "rules", "runtime": "learner", "max_chars": 6000},
+  "budgets": {"max_submissions": 2, "max_questions": 0, "max_calls": 80, "max_seconds": 600},
+  "runtimes": {
+    "worker": {"type": "demo"},
+    "reviewer": {"type": "demo"},
+    "judge": {"type": "demo"},
+    "learner": {"type": "demo"}
+  },
+  "tasks": [
+    {"id": "essay-train", "type": "essay", "split": "train", "brief": "Write a short essay explaining how feedback helps a research team learn. Include an example and a limitation.", "checks": {"min_words": 80, "max_words": 350, "contains": ["feedback"]}},
+    {"id": "page-train", "type": "webpage", "split": "train", "render": false, "brief": "Design a landing page for a public research workshop. Explain its purpose and include a Learn more button.", "checks": {"contains": ["research", "button"]}},
+    {"id": "essay-test", "type": "essay", "split": "test", "brief": "Write a short essay explaining how evidence helps people revise a mistaken belief. Include an example and a limitation.", "checks": {"min_words": 80, "max_words": 350, "contains": ["evidence"]}},
+    {"id": "page-test", "type": "webpage", "split": "test", "render": false, "brief": "Design a landing page for a research reading group. Explain its purpose and include a Learn more button.", "checks": {"contains": ["research", "button"]}}
+  ]
+}
