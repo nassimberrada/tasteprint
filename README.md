@@ -15,9 +15,12 @@ uv sync
 uv run python -m experiment run
 uv run python -m experiment compare --techniques none profile rules skills
 uv run python -m unittest discover -s tests -v
+uv run python -m experiment dashboard --runs reports/runs
 ```
 
 The deterministic demo exercises the complete state machine without network access. It is plumbing validation, not evidence that an AI understands human taste. Runs create a private, append-only directory under `reports/runs/` containing `manifest.json`, `events.private.jsonl`, immutable artifact versions, `results.json`, `memory.private.json`, `report.md`, and a readable `trace.md` summarizing submissions, checks, feedback, revisions, and terminal states.
+
+The dashboard polls active run journals, displays worker artifacts and persona-reviewer feedback, and can replay completed runs from their event timeline. It binds to localhost by default.
 
 ## Use an actual model through OpenRouter
 

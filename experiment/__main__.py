@@ -19,6 +19,10 @@ def main():
         if name == "compare":
             command.add_argument("--techniques", nargs="+", default=["none", "profile", "rules", "skills"])
     commands.add_parser("plugins", help="List built-in factories")
+    dashboard = commands.add_parser("dashboard", help="Serve a live run dashboard and replay UI")
+    dashboard.add_argument("--runs", type=Path, default=Path("reports/runs"))
+    dashboard.add_argument("--host", default="127.0.0.1")
+    dashboard.add_argument("--port", type=int, default=8765)
     commands.add_parser("legacy", help="Old numerical choice experiment; use python -m experiment.legacy")
     args = parser.parse_args()
     if args.command == "legacy":
@@ -29,6 +33,10 @@ def main():
     if args.command == "plugins":
         from .plugins import BUILTINS
         print(json.dumps(BUILTINS, indent=2))
+        return
+    if args.command == "dashboard":
+        from .dashboard import serve
+        serve(args.runs, args.host, args.port)
         return
     try:
         config = load(args.config)
