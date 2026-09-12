@@ -29,6 +29,9 @@ class Worker(Protocol):
 class User(Protocol):
     def review(self, task: dict, artifact: dict, history: list, images: list[str]) -> dict: ...
     def answer(self, task: dict, question: str, history: list) -> str: ...
+
+
+class Evaluator(Protocol):
     def assess(self, task: dict, artifact: dict, images: list[str]) -> dict: ...
 
 

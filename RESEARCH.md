@@ -4,7 +4,7 @@
 
 An assistant can improve one artifact through feedback without learning anything durable about its user. This project asks whether a worker can infer a user's conditional preferences from repeated artifact reviews, carry that understanding to a new task, and revise it when preferences change.
 
-The operational target is fewer clarification questions and revisions, especially **first-pass approval on held-out tasks** for a previously encountered user, while objective task quality remains acceptable.
+The operational target is fewer clarification questions and revisions, especially **first-pass approval on held-out tasks** for a previously encountered user, while objective task quality remains acceptable. Factor-level evaluator scores show which preferences were learned, transferred, or missed rather than collapsing all fit into one number.
 
 ## Experimental unit
 
@@ -38,7 +38,7 @@ An extension is a trusted Python factory referenced by `module:Factory` in JSON.
 
 Compare no persistent profile, recent conversation, evolving written profile, retrieved examples, scoped rules, and any learned adapter. Keep worker model, user agent, task order, budgets, and available evidence matched.
 
-Primary metrics are first-pass approval on test tasks, approval within the submission budget, revisions, questions, time, model calls, and cost. Secondary metrics are objective check success, independent preference-fit score, adaptation delay after a change, retention of unrelated preferences, calibration, and regression after updates. Include failed and unattempted episodes in denominators.
+Primary metrics are first-pass approval on test tasks, approval within the submission budget, revisions, questions, time, model calls, and cost. Secondary metrics are objective check success, independent preference-fit score, factor-level scores and calibration, adaptation delay after a change, retention of unrelated preferences, and regression after updates. Include failed and unattempted episodes in denominators.
 
 ## Validity safeguards
 

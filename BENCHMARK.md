@@ -18,7 +18,7 @@ For a faster stratified comparison, use `configs/sampled.json`: it crosses all
 four persona factor combinations with one training and one held-out task. It is
 intended for rapid method iteration, not statistical claims.
 The default evaluation condition is frozen profiling with stable preferences.
-Report first-pass approval, objective checks, independent preference scores,
+Report first-pass approval, objective checks, independent overall and factor-level preference scores,
 revision count, questions, time, calls, and results by persona, factor, split,
 and task family. Include budget failures in denominators.
 

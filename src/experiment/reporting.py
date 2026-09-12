@@ -17,6 +17,20 @@ def render_report(results: list, calls: int) -> str:
                     lambda r: r["first_pass"])) + " |")
     lines.extend(["", "## Terminal states", ""])
     lines.extend(f"- {status}: {count}" for status, count in sorted(Counter(r["status"] for r in results).items()))
+    factors = {}
+    for row in results:
+        for name, score in row.get("final_factor_scores", {}).items():
+            factors.setdefault(name, []).append(score)
+    if factors:
+        lines.extend(["", "## Factor-level evaluation", "",
+                      "| Factor | Assessments | Mean final score | Mean score change |",
+                      "|---|---:|---:|---:|"])
+        for name in sorted(factors):
+            deltas = [row["factor_score_delta"][name] for row in results
+                      if name in row.get("factor_score_delta", {})]
+            values = factors[name]
+            lines.append(f"| {name} | {len(values)} | {sum(values) / len(values):.3f} | "
+                         f"{(sum(deltas) / len(deltas)) if deltas else 0:.3f} |")
     lines.extend(["", "## Per task", "",
                   "| User | Task | Status | Submissions | Questions | Final preference score | Score delta | Feedback rounds | Memory updates | Time to approval (s) |",
                   "|---|---|---|---:|---:|---:|---:|---:|---:|---:|"])

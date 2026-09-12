@@ -6,7 +6,7 @@ Each experiment combines a worker agent, a user agent with a private persona and
 
 Test-time behavior is controlled by two independent axes: `test_time_profiling_policy` (`frozen` or `updating`) controls whether learned memory may change during test tasks; `test_time_user_preferences` (`stable` or `drifting`) controls whether scheduled persona changes are applied. Both default to `frozen` and `stable` so held-out transfer is reproducible.
 
-The important metric is **first-pass approval on held-out tasks**: approval on the first submission with no clarification questions. Approval alone is insufficient because a simulator can be overly cooperative; objective checks, independent assessment, cost, and failed tasks are recorded separately.
+The important metric is **first-pass approval on held-out tasks**: approval on the first submission with no clarification questions. Approval alone is insufficient because a simulator can be overly cooperative; objective checks, independent assessment, cost, and failed tasks are recorded separately. Evaluators also return factor-level fit scores when preference factors are available, so reports show what transferred rather than only one aggregate score.
 
 ## Run the local fixture
 

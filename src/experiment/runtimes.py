@@ -167,7 +167,9 @@ class DemoRuntime:
                 signals = ("#eee", "#fff", "georgia", "serif", "muted", "spacing", "border-top")
                 match = sum(signal in text for signal in signals) >= 1
             if request.purpose == "assess":
-                return Response({"score": float(match), "reason": f"Fixture evaluated observable {wanted} style signals."})
+                factors = {name: float(match) for name in payload.get("factor_names", [])}
+                return Response({"score": float(match), "reason": f"Fixture evaluated observable {wanted} style signals.",
+                                 "factors": factors})
             return Response({"approved": match, "feedback": "Approved." if match else
                              f"Please make the presentation more {wanted}: reflect that tone in the artifact's language and visual choices.", "confidence": 0.8})
         if request.purpose == "answer":

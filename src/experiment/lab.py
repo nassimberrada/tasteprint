@@ -79,7 +79,7 @@ class Session:
                         "history": [], "artifact": None, "last_check": None,
                         "started": time.monotonic(), "first_pass": False,
                         "first_submission_approved": False, "last_assessment": None,
-                        "assessment_scores": [], "memory_updates": 0}
+                        "assessment_scores": [], "factor_assessments": [], "memory_updates": 0}
         self.journal.event("task_start", episode=self.position, user_id=persona["id"],
                            task=self.task.public(), split=self.current["split"],
                            memory=self.technique.context())
@@ -166,6 +166,7 @@ class Session:
         state["last_assessment"] = assessment
         if assessment is not None:
             state["assessment_scores"].append(assessment["score"])
+            state["factor_assessments"].append(assessment.get("factors", {}))
         accepted = review["approved"] and check["passed"]
         public = {"approved": accepted, "feedback": review["feedback"], "checks": check}
         state["history"].append({"submission": version, **public})
@@ -194,11 +195,19 @@ class Session:
                       "last_check", "last_assessment")}
             result["seconds"] = time.monotonic() - state["started"]
             scores = state["assessment_scores"]
+            factor_scores = state["factor_assessments"]
+            initial_factors = factor_scores[0] if factor_scores else {}
+            final_factors = factor_scores[-1] if factor_scores else {}
+            factor_delta = {name: final_factors[name] - initial_factors[name]
+                            for name in initial_factors.keys() & final_factors.keys()}
             result.update({"feedback_rounds": len(scores),
                            "memory_updates": state["memory_updates"],
                            "initial_preference_score": scores[0] if scores else None,
                            "final_preference_score": scores[-1] if scores else None,
                            "preference_score_delta": (scores[-1] - scores[0]) if scores else None,
+                           "initial_factor_scores": initial_factors,
+                           "final_factor_scores": final_factors,
+                           "factor_score_delta": factor_delta,
                            "time_to_approval_seconds": result["seconds"] if status == "approved" else None})
             self.results.append(result)
             self.journal.event("task_end", **result)
@@ -230,7 +239,9 @@ class Session:
                     "last_check": None, "last_assessment": None, "seconds": 0,
                     "feedback_rounds": 0, "memory_updates": 0,
                     "initial_preference_score": None, "final_preference_score": None,
-                    "preference_score_delta": None, "time_to_approval_seconds": None})
+                    "preference_score_delta": None, "initial_factor_scores": {},
+                    "final_factor_scores": {}, "factor_score_delta": {},
+                    "time_to_approval_seconds": None})
         self.closed = True
         self.journal.write("results.json", self.results)
         self.journal.write("memory.private.json", {str(key): value.context() for key, value in self.memories.items()})
