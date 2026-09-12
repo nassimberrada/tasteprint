@@ -12,7 +12,7 @@ def build_server(session):
     server = FastMCP("Preference experiments", instructions=(
         "Call next_task, then create the requested artifact. Use ask_user for clarification, "
         "submit_artifact with complete file contents for review, and revise until status is terminal. "
-        "Then call next_task. Use only provided memory across tasks. Private profiles and assessments "
+        "Then call next_task. Use only provided memory across tasks. Private profiles and evaluator assessments "
         "are intentionally unavailable. Do not inspect the experiment server's files."))
     lock = RLock()
 
@@ -53,7 +53,7 @@ def build_server(session):
 
     @server.tool()
     def get_status() -> dict:
-        """Read progress only; never returns private persona, judge scores or server paths."""
+        """Read progress only; never returns private persona, evaluator scores or server paths."""
         return call(session.status)
 
     @server.tool()

@@ -11,7 +11,7 @@ uv run python -m unittest discover -s tests -v
 Extensions are configured through trusted `module:Factory` paths. A custom task
 implements the public task contract (`public`, `check`, and `inspect`); a custom
 runtime implements `invoke(Request) -> Response`. Keep worker-visible data
-separate from private personas and independent assessments.
+separate from private personas and independent evaluator assessments.
 
 Experiment configs are runtime-agnostic. Put provider definitions in a runtime
 bundle under `runtimes/` and pass it with `--runtimes`; do not copy provider

@@ -1,6 +1,6 @@
 {
   "worker": {"type": "demo"},
   "reviewer": {"type": "demo"},
-  "judge": {"type": "demo"},
+  "evaluator": {"type": "demo"},
   "profiling": {"type": "demo"}
 }

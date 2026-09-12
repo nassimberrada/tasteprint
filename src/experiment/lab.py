@@ -19,7 +19,7 @@ class Session:
             self.config["runtimes"] = copy.deepcopy(runtime_specs)
         self.config.setdefault("runtimes", {
             "worker": {"type": "demo"}, "reviewer": {"type": "demo"},
-            "judge": {"type": "demo"}, "profiling": {"type": "demo"}})
+            "evaluator": {"type": "demo"}, "profiling": {"type": "demo"}})
         self.journal = Journal(output, self.config)
         self.runtimes = {name: self.journal.runtime(name, create("runtime", spec))
                          for name, spec in self.config["runtimes"].items()}
@@ -65,11 +65,13 @@ class Session:
         task_spec = self.config["tasks"][task_index]
         technique_spec = self.config["profiling"]
         if user_index not in self.memories:
-            self.memories[user_index] = create("memory", technique_spec,
+            self.memories[user_index] = create("profiling", technique_spec,
                                                runtime=self.runtime(technique_spec, "runtime"))
         self.task = create("task", task_spec)
-        self.user = create("user", persona, runtime=self.runtime(persona),
-                           judge_runtime=self.runtime(persona, "judge_runtime"))
+        self.user = create("user", persona, runtime=self.runtime(persona))
+        evaluator_spec = copy.deepcopy(self.config.get("evaluator", {"type": "llm", "runtime": "evaluator"}))
+        self.evaluator = create("evaluator", {**evaluator_spec, "persona": persona},
+                                runtime=self.runtime(evaluator_spec))
         self.technique = self.memories[user_index]
         self.current = {"episode": self.position, "user_id": persona["id"],
                         "task_id": task_spec["id"], "split": task_spec.get("split", "train"),
@@ -157,7 +159,7 @@ class Session:
         if check["passed"]:
             images = self.task.inspect(directory)
             review = self.user.review(self.task.public(), artifact, copy.deepcopy(state["history"]), images)
-            assessment = self.user.assess(self.task.public(), artifact, images)
+            assessment = self.evaluator.assess(self.task.public(), artifact, images)
         else:
             review = {"approved": False, "feedback": "Fix the objective task requirements."}
             assessment = None

@@ -3,10 +3,11 @@
   "test_time_user_preferences": "stable",
   "worker": {"type": "llm", "runtime": "worker"},
   "profiling": {"type": "rules", "runtime": "profiling", "max_chars": 12000},
+  "evaluator": {"type": "llm", "runtime": "evaluator"},
   "budgets": {"max_submissions": 4, "max_questions": 2, "max_calls": 200, "max_seconds": 1800},
   "users": [
     {
-      "id": "user-a", "type": "llm", "runtime": "reviewer", "judge_runtime": "judge",
+      "id": "user-a", "type": "llm", "runtime": "reviewer",
       "persona": "A researcher who publishes clear explanations for busy colleagues.",
       "preferences": {
         "default": "Restrained presentation, concrete examples, plain language, explicit uncertainty.",
@@ -16,7 +17,7 @@
       "feedback_style": "Give at most two specific improvements per review. Explain why when asked."
     },
     {
-      "id": "user-b", "type": "llm", "runtime": "reviewer", "judge_runtime": "judge",
+      "id": "user-b", "type": "llm", "runtime": "reviewer",
       "persona": "An educator making science approachable for curious newcomers.",
       "preferences": {
         "default": "Playful, inviting presentation with concrete examples and accurate claims.",

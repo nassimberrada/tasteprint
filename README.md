@@ -2,7 +2,7 @@
 
 This repository studies a practical question: can an AI worker learn what a particular user likes while completing real tasks, so that it needs fewer revisions on the next task?
 
-Each experiment combines a worker agent, a user agent with a private persona and taste profile, a swappable profiling strategy, and a separately selected runtime bundle. The runner gives the worker a task, collects a submission, asks the user agent for feedback, and repeats until approval or a budget is reached. On later tasks for the same user, only the configured preference profile is carried forward.
+Each experiment combines a worker agent, a user agent with a private persona and taste profile, an independent evaluator, a swappable profiling strategy, and a separately selected runtime bundle. The runner gives the worker a task, collects a submission, asks the user agent for feedback, and repeats until approval or a budget is reached. On later tasks for the same user, only the configured preference profile is carried forward.
 
 Test-time behavior is controlled by two independent axes: `test_time_profiling_policy` (`frozen` or `updating`) controls whether learned memory may change during test tasks; `test_time_user_preferences` (`stable` or `drifting`) controls whether scheduled persona changes are applied. Both default to `frozen` and `stable` so held-out transfer is reproducible.
 
@@ -25,7 +25,7 @@ The dashboard polls active run journals, displays worker artifacts and persona-r
 
 ## Use an actual model through OpenRouter
 
-OpenRouter uses an OpenAI-compatible chat schema and returns normalized responses. Create a runtime bundle mapping worker, reviewer, judge, and profiling roles to OpenRouter settings, or point each role at a different provider:
+OpenRouter uses an OpenAI-compatible chat schema and returns normalized responses. Create a runtime bundle mapping worker, reviewer, evaluator, and profiling roles to OpenRouter settings, or point each role at a different provider:
 
 ```bash
 export OPENROUTER_API_KEY='...'
@@ -51,7 +51,7 @@ The server exposes `next_task`, `get_task`, `ask_user`, `submit_artifact`, `get_
 
 ## Swap components
 
-Experiment configs are runtime-agnostic JSON and support relative `include` files. Runtime bundles live under `runtimes/` and map logical roles (`worker`, `reviewer`, `judge`, `profiling`) to providers. Built-ins are runtimes `demo`, `openrouter`, `command`, `codex`; worker and user `llm`; profiling strategies `none`, `summary`, `rules`, `skills`; and tasks `essay`, `webpage`, `files`. The old `profile` strategy name remains accepted as an alias. Extensions can instead be written as trusted `module:Factory` plugins; see `CONTRIBUTING.md`.
+Experiment configs are runtime-agnostic JSON and support relative `include` files. Runtime bundles live under `runtimes/` and map logical roles (`worker`, `reviewer`, `evaluator`, `profiling`) to providers. Built-ins are runtimes `demo`, `openrouter`, `command`, `codex`; worker, user, and evaluator `llm`; profiling strategies `none`, `summary`, `rules`, `skills`; and tasks `essay`, `webpage`, `files`. Extensions can instead be written as trusted `module:Factory` plugins; see `CONTRIBUTING.md`.
 
 The public contracts are in `src/experiment/contracts.py`. Task plugins return a public brief, validate submitted relative text files, run objective checks, and optionally return image data for a visual reviewer. Runtime plugins implement `invoke(Request) -> Response`. Profiling strategies see worker-visible evidence and expose `context()`; they never receive the private user profile.
 
@@ -64,4 +64,4 @@ The public contracts are in `src/experiment/contracts.py`. Task plugins return a
 
 The old numerical choice experiment remains at `src/experiment/legacy.py` as a small protocol fixture. It is separate from the artifact-feedback engine. For implementation context, open `DESIGN.html` and `RESEARCH.md` before changing the runner.
 
-LLM user simulators can be too agreeable, leak information, or behave unlike people. Use multiple simulator models, hold out tasks and personas, keep the judge independent, and validate promising findings with consented human participants. A successful simulated run is a testable result, not proof of real-user alignment.
+LLM user simulators can be too agreeable, leak information, or behave unlike people. Use multiple simulator models, hold out tasks and personas, keep the evaluator independent, and validate promising findings with consented human participants. A successful simulated run is a testable result, not proof of real-user alignment.

@@ -87,7 +87,7 @@ class CodexRuntime:
     """Run an independent Codex agent for any protocol role.
 
     Each request is a fresh, ephemeral invocation. This makes worker, reviewer,
-    judge, and learner agents independently configurable even when they use the
+    reviewer, evaluator, and profiling roles independently configurable even when they use the
     same model identifier.
     """
     def __init__(self, config: dict):

@@ -57,7 +57,7 @@ class LabTests(unittest.TestCase):
         self.assertIn("playful", json.dumps(session.memories[1].context()).lower())
 
     def test_no_memory_baseline_does_not_transfer(self):
-        self.config["technique"]["type"] = "none"
+        self.config["profiling"]["type"] = "none"
         session = self.session()
         session.run()
         self.assertEqual(session.results[6]["submissions"], 2)

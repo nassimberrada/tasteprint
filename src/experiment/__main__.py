@@ -19,7 +19,7 @@ def main():
         command.add_argument("--runtimes", type=Path, default=Path("runtimes/demo.json"),
                              help="JSON runtime bundle; use runtimes/codex.json for Codex")
         if name == "compare":
-            command.add_argument("--profiling", "--techniques", dest="profiling", nargs="+",
+            command.add_argument("--profiling", dest="profiling", nargs="+",
                                  default=["none", "summary", "rules", "skills"],
                                  help="Profiling strategies to compare")
     commands.add_parser("plugins", help="List built-in factories")
@@ -61,9 +61,6 @@ def main():
                 variant = copy.deepcopy(config)
                 variant["mode"] = "api"
                 variant["profiling"]["type"] = technique
-                # Keep the legacy alias synchronized for older config consumers.
-                variant["memory"]["type"] = technique
-                variant["technique"]["type"] = technique
                 session = Session(variant, args.output, runtime_specs)
                 destination = session.run()
                 print(f"{technique}: {destination}")

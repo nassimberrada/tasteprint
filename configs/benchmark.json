@@ -16,7 +16,7 @@
   },
   "users": [
     {
-      "id": "participant-01", "type": "llm", "runtime": "reviewer", "judge_runtime": "judge",
+      "id": "participant-01", "type": "llm", "runtime": "reviewer",
       "persona": "A coordinator who commissions varied work for a community learning organization. Evaluate the same tastes across domains without assuming professional stereotypes.",
       "latent_factors": {"information_order": "concrete_first", "expression": "restrained"},
       "preferences": {
@@ -27,7 +27,7 @@
       "feedback_style": "Give at most two concrete changes grounded in the artifact. Do not name hidden factors or list the whole profile. Apply the same approval threshold across revisions."
     },
     {
-      "id": "participant-02", "type": "llm", "runtime": "reviewer", "judge_runtime": "judge",
+      "id": "participant-02", "type": "llm", "runtime": "reviewer",
       "persona": "A coordinator who commissions varied work for a community learning organization. Evaluate the same tastes across domains without assuming professional stereotypes.",
       "latent_factors": {"information_order": "concrete_first", "expression": "animated"},
       "preferences": {
@@ -38,7 +38,7 @@
       "feedback_style": "Give at most two concrete changes grounded in the artifact. Do not name hidden factors or list the whole profile. Apply the same approval threshold across revisions."
     },
     {
-      "id": "participant-03", "type": "llm", "runtime": "reviewer", "judge_runtime": "judge",
+      "id": "participant-03", "type": "llm", "runtime": "reviewer",
       "persona": "A coordinator who commissions varied work for a community learning organization. Evaluate the same tastes across domains without assuming professional stereotypes.",
       "latent_factors": {"information_order": "principle_first", "expression": "restrained"},
       "preferences": {
@@ -49,7 +49,7 @@
       "feedback_style": "Give at most two concrete changes grounded in the artifact. Do not name hidden factors or list the whole profile. Apply the same approval threshold across revisions."
     },
     {
-      "id": "participant-04", "type": "llm", "runtime": "reviewer", "judge_runtime": "judge",
+      "id": "participant-04", "type": "llm", "runtime": "reviewer",
       "persona": "A coordinator who commissions varied work for a community learning organization. Evaluate the same tastes across domains without assuming professional stereotypes.",
       "latent_factors": {"information_order": "principle_first", "expression": "animated"},
       "preferences": {
