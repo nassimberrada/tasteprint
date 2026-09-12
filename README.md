@@ -32,7 +32,7 @@ export OPENROUTER_API_KEY='...'
 export EXPERIMENT_MODEL='openai/gpt-5.2'
 ```
 
-The checked-in `smoke.json` is the fastest Codex plumbing run when paired with `runtimes/codex.json`. `sampled.json` is a stratified sample of the benchmark, covering training, held-out, and unseen task families. Pair `benchmark.json` with `runtimes/codex.json` for the full Codex benchmark. Create a similar runtime bundle for OpenRouter runs.
+The checked-in `smoke.json` is the fastest Codex plumbing run when paired with `runtimes/codex.json`. `sampled.json` is the fast stratified sample: four personas, one training task, and one held-out task. Pair `benchmark.json` with `runtimes/codex.json` for the full Codex benchmark. Create a similar runtime bundle for OpenRouter runs.
 
 The larger cross-domain benchmark is described in [BENCHMARK.md](BENCHMARK.md).
 

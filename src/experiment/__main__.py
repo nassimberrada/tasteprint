@@ -61,6 +61,9 @@ def main():
                 variant = copy.deepcopy(config)
                 variant["mode"] = "api"
                 variant["profiling"]["type"] = technique
+                # Keep the legacy alias synchronized for older config consumers.
+                variant["memory"]["type"] = technique
+                variant["technique"]["type"] = technique
                 session = Session(variant, args.output, runtime_specs)
                 destination = session.run()
                 print(f"{technique}: {destination}")
