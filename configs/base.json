@@ -2,7 +2,7 @@
   "test_time_profiling_policy": "frozen",
   "test_time_user_preferences": "stable",
   "worker": {"type": "llm", "runtime": "worker"},
-  "technique": {"type": "rules", "runtime": "learner", "max_chars": 12000},
+  "profiling": {"type": "rules", "runtime": "profiling", "max_chars": 12000},
   "budgets": {"max_submissions": 4, "max_questions": 2, "max_calls": 200, "max_seconds": 1800},
   "users": [
     {

@@ -14,10 +14,14 @@ def main():
     commands = parser.add_subparsers(dest="command", required=True)
     for name in ("run", "compare", "serve"):
         command = commands.add_parser(name)
-        command.add_argument("--config", type=Path, default=Path(__file__).parent.parent / "configs/demo.json")
+        command.add_argument("--config", type=Path, default=Path(__file__).parents[2] / "configs/demo.json")
         command.add_argument("--output", type=Path, default=Path("reports/runs"))
+        command.add_argument("--runtimes", type=Path, default=Path("runtimes/demo.json"),
+                             help="JSON runtime bundle; use runtimes/codex.json for Codex")
         if name == "compare":
-            command.add_argument("--techniques", nargs="+", default=["none", "profile", "rules", "skills"])
+            command.add_argument("--profiling", "--techniques", dest="profiling", nargs="+",
+                                 default=["none", "summary", "rules", "skills"],
+                                 help="Profiling strategies to compare")
     commands.add_parser("plugins", help="List built-in factories")
     dashboard = commands.add_parser("dashboard", help="Serve a live run dashboard and replay UI")
     dashboard.add_argument("--runs", type=Path, default=Path("reports/runs"))
@@ -40,23 +44,24 @@ def main():
         return
     try:
         config = load(args.config)
+        runtime_specs = load(args.runtimes)
         if args.command == "serve":
             from .mcp_server import build_server
             config["mode"] = "mcp"
-            session = Session(config, args.output)
+            session = Session(config, args.output, runtime_specs)
             print(f"Private experiment records: {session.journal.directory}", file=sys.stderr)
             try:
                 build_server(session).run(transport="stdio")
             finally:
                 session.close("interrupted")
         else:
-            selections = args.techniques if args.command == "compare" else [config["technique"]["type"]]
+            selections = args.profiling if args.command == "compare" else [config["profiling"]["type"]]
             paths = []
             for technique in selections:
                 variant = copy.deepcopy(config)
                 variant["mode"] = "api"
-                variant["technique"]["type"] = technique
-                session = Session(variant, args.output)
+                variant["profiling"]["type"] = technique
+                session = Session(variant, args.output, runtime_specs)
                 destination = session.run()
                 print(f"{technique}: {destination}")
                 print((destination / "report.md").read_text())

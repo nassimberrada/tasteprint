@@ -21,14 +21,14 @@ The engine keeps these factors independent:
 - **Task:** brief, artifact format, objective checks, materials, and optional rendering.
 - **User agent:** private persona, preferences, feedback style, and scheduled changes.
 - **Worker:** policy for asking, creating, and revising.
-- **Technique:** no memory, written profile, scoped rules, skills, retrieval, or later weight adaptation.
+- **Profiling strategy:** no profile, written summary, scoped rules, skills, retrieval, or later weight adaptation.
 - **Runtime:** OpenRouter API, command wrapper, or MCP client driving the same tools.
 
 An extension is a trusted Python factory referenced by `module:Factory` in JSON. Configuration is declarative; tasks needing custom execution or rendering can supply it through a plugin.
 
 ## Hypotheses
 
-1. Conditional memory transfers better than a flat profile when taste depends on task context.
+1. Conditional profiling transfers better than a flat profile when taste depends on task context.
 2. Evidence, provenance, uncertainty, and exceptions improve adaptation after noisy feedback or a preference change.
 3. Selective clarification questions reduce total interaction cost under a fixed question budget.
 4. Skills or explicit rules reduce revision count on new tasks without lowering objective quality.
@@ -36,7 +36,7 @@ An extension is a trusted Python factory referenced by `module:Factory` in JSON.
 
 ## Baselines and metrics
 
-Compare no persistent memory, recent conversation, evolving written profile, retrieved examples, scoped rule memory, and any learned adapter. Keep worker model, user agent, task order, budgets, and available evidence matched.
+Compare no persistent profile, recent conversation, evolving written profile, retrieved examples, scoped rules, and any learned adapter. Keep worker model, user agent, task order, budgets, and available evidence matched.
 
 Primary metrics are first-pass approval on test tasks, approval within the submission budget, revisions, questions, time, model calls, and cost. Secondary metrics are objective check success, independent preference-fit score, adaptation delay after a change, retention of unrelated preferences, calibration, and regression after updates. Include failed and unattempted episodes in denominators.
 
@@ -50,7 +50,9 @@ LLM simulators may be sycophantic, leak their profile, or fail to resemble human
 
 The deterministic `demo` runtime exercises the full loop locally. `openrouter` performs real JSON chat calls. `command` invokes a trusted executable that reads a JSON request from stdin and writes a JSON response to stdout. `serve` exposes the shared session through MCP tools for an external harness. Built-in tasks are text essays, source-checked HTML pages, and generic files; browser screenshots require the optional `render` extra.
 
-The old numerical choice experiment in `experiment/legacy.py` remains useful for checking temporal prediction mechanics, but is not an artifact-feedback result.
+The old numerical choice experiment in `src/experiment/legacy.py` remains useful for checking temporal prediction mechanics, but is not an artifact-feedback result.
+
+The separate `configs/benchmark.json` benchmark crosses information order and expressive style in four private personas. Its four training families lead to two held-out domain variants and four unseen families: email, data stories, troubleshooting guides, and slide outlines. Public briefs leave preference choices open and provide self-contained source materials. The benchmark protocol and analysis slices are documented in [BENCHMARK.md](BENCHMARK.md). The original small suite remains a plumbing fixture.
 
 ## Next studies
 

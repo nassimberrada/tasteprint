@@ -111,8 +111,9 @@ class LabTests(unittest.TestCase):
                 validate_files(files)
 
     def test_plugin_factory_loads_without_registry_edits(self):
-        task = create("task", {"type": "examples.custom_task:Task", "id": "new",
-                               "brief": "Explain something"})
+        task = create("task", {"type": "experiment.tasks:FileTask", "id": "new",
+                               "brief": "Explain something", "entrypoint": "output.txt",
+                               "checks": {"contains": ["example"]}})
         self.assertFalse(task.check({"output.txt": "a claim"})["passed"])
         self.assertTrue(task.check({"output.txt": "an example"})["passed"])
 

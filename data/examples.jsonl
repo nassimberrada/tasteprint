@@ -1,8 +1,0 @@
-{"user_id":"person-1","context":"status","choice":"concise","phase":"stable"}
-{"user_id":"person-1","context":"research","choice":"detailed","phase":"stable"}
-{"user_id":"person-1","context":"status","choice":"concise","phase":"stable"}
-{"user_id":"person-1","context":"research","choice":"detailed","phase":"stable"}
-{"user_id":"person-1","context":"status","choice":"detailed","phase":"exception"}
-{"user_id":"person-1","context":"status","choice":"concise","phase":"return"}
-{"user_id":"person-1","context":"research","choice":"concise","phase":"change"}
-{"user_id":"person-1","context":"research","choice":"concise","phase":"change"}

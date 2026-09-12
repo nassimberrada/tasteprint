@@ -1,9 +1,0 @@
-{
-  "include": ["demo.json"],
-  "runtimes": {
-    "worker": {"type": "command", "command": ["python", "-m", "examples.command_wrapper"]},
-    "reviewer": {"type": "demo"},
-    "judge": {"type": "demo"},
-    "learner": {"type": "demo"}
-  }
-}

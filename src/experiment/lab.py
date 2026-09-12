@@ -13,8 +13,13 @@ from .tasks import validate_files
 
 
 class Session:
-    def __init__(self, config: dict, output: Path = Path("reports/runs")):
+    def __init__(self, config: dict, output: Path = Path("reports/runs"), runtime_specs: dict | None = None):
         self.config = resolve(config)
+        if runtime_specs is not None:
+            self.config["runtimes"] = copy.deepcopy(runtime_specs)
+        self.config.setdefault("runtimes", {
+            "worker": {"type": "demo"}, "reviewer": {"type": "demo"},
+            "judge": {"type": "demo"}, "profiling": {"type": "demo"}})
         self.journal = Journal(output, self.config)
         self.runtimes = {name: self.journal.runtime(name, create("runtime", spec))
                          for name, spec in self.config["runtimes"].items()}
@@ -58,10 +63,10 @@ class Session:
                 if task_index >= change["from_task"]:
                     persona["preferences"] = copy.deepcopy(change["preferences"])
         task_spec = self.config["tasks"][task_index]
-        technique_spec = self.config["technique"]
+        technique_spec = self.config["profiling"]
         if user_index not in self.memories:
-            self.memories[user_index] = create("technique", technique_spec,
-                                               runtime=self.runtime(technique_spec))
+            self.memories[user_index] = create("memory", technique_spec,
+                                               runtime=self.runtime(technique_spec, "runtime"))
         self.task = create("task", task_spec)
         self.user = create("user", persona, runtime=self.runtime(persona),
                            judge_runtime=self.runtime(persona, "judge_runtime"))

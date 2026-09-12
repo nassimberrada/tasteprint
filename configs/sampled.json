@@ -1,0 +1,66 @@
+{
+  "include": ["benchmark.json"],
+  "mode": "api",
+  "test_time_profiling_policy": "frozen",
+  "test_time_user_preferences": "stable",
+  "profiling": {"type": "rules", "runtime": "profiling", "max_chars": 12000},
+  "budgets": {"max_submissions": 3, "max_questions": 1, "max_calls": 500, "max_seconds": 7200},
+  "tasks": [
+    {
+      "id": "sample-train-explanation", "type": "essay", "split": "train",
+      "benchmark": {"family": "explanation", "domain": "ecology", "slice": "training", "factors": ["information_order", "expression"]},
+      "brief": "Explain composting to new community-garden volunteers in 140–320 words. Include one concrete example, the general process, and a limitation. Use only the supplied facts; choose the organization and tone for this user.",
+      "materials": {"facts": ["Composting uses decomposers to break down organic material.", "A mix of dry leaves and fruit scraps provides different materials; air and moisture support decomposition.", "A pile that is too wet can smell and needs more dry material and aeration.", "A small volunteer-managed pile may not get hot enough to destroy all weed seeds."]},
+      "checks": {"min_words": 140, "max_words": 320, "contains": ["compost", "moisture", "seeds"]}
+    },
+    {
+      "id": "sample-train-webpage", "type": "webpage", "split": "train", "render": false,
+      "benchmark": {"family": "landing_page", "domain": "community_repair", "slice": "training", "factors": ["information_order", "expression"]},
+      "brief": "Create a self-contained landing page for the Fix Together repair workshop. Explain its purpose, show a concrete participant activity, present the supplied logistics, and include a labeled registration button. Choose reading order and visual style for this user.",
+      "materials": {"name": "Fix Together", "schedule": "Saturday, 10:00–12:00", "location": "Maple Community Hall", "activity": "Practice repairing a torn fabric tote with a volunteer.", "scope": "Bring a clean fabric item. Tools are provided. Electrical repairs are not offered."},
+      "checks": {"contains": ["Fix Together", "Maple Community Hall", "button", "electrical"]}
+    },
+    {
+      "id": "sample-heldout-explanation", "type": "essay", "split": "test",
+      "benchmark": {"family": "explanation", "domain": "digital_archiving", "slice": "heldout_variant", "factors": ["information_order", "expression"]},
+      "brief": "Explain file version history to new volunteers digitizing a local archive in 140–320 words. Include one concrete example, the general mechanism, and a limitation. Use only the supplied facts and choose organization and tone for this user.",
+      "materials": {"facts": ["Version history saves earlier states of a document.", "A volunteer can compare an earlier transcription with the current text and restore a mistaken edit.", "Version history on one device may be lost if that device fails.", "An independently stored backup protects against that failure; version history is not a substitute for a backup."]},
+      "checks": {"min_words": 140, "max_words": 320, "contains": ["version", "restore", "backup"]}
+    },
+    {
+      "id": "sample-heldout-webpage", "type": "webpage", "split": "test", "render": false,
+      "benchmark": {"family": "landing_page", "domain": "astronomy", "slice": "heldout_variant", "factors": ["information_order", "expression"]},
+      "brief": "Create a self-contained landing page for Neighborhood Sky Night. Explain its purpose, show a concrete participant activity, present the supplied logistics, and include a labeled reservation button. Choose reading order and visual style for this user.",
+      "materials": {"name": "Neighborhood Sky Night", "schedule": "Friday, 19:00–20:30", "location": "Oak Field", "activity": "Use a printed star chart with a volunteer to identify a constellation.", "scope": "No equipment is required. The event moves to an indoor star-map activity if cloudy."},
+      "checks": {"contains": ["Neighborhood Sky Night", "Oak Field", "button", "cloudy"]}
+    },
+    {
+      "id": "sample-unseen-email", "type": "files", "entrypoint": "email.md", "split": "test",
+      "benchmark": {"family": "email", "domain": "volunteer_coordination", "slice": "unseen_family", "factors": ["information_order", "expression"]},
+      "brief": "Draft a 120–240 word email inviting returning volunteers to a seed-packing session. Include a subject, purpose, concrete description of what a volunteer will do, logistics, and a reply request. Choose organization and voice for this user.",
+      "materials": {"session": "Seed Share", "when": "Sunday, 14:00–15:00", "where": "Willow Room", "activity": "Count bean seeds into envelopes and label each envelope with its variety.", "reply": "Ask recipients to reply by Thursday saying whether they can attend.", "access": "Seated work is available; materials are provided."},
+      "checks": {"min_words": 120, "max_words": 240, "contains": ["Subject:", "Seed Share", "Willow Room", "Thursday"]}
+    },
+    {
+      "id": "sample-unseen-data-story", "type": "webpage", "split": "test", "render": false,
+      "benchmark": {"family": "data_story", "domain": "tool_lending", "slice": "unseen_family", "factors": ["information_order", "expression"]},
+      "brief": "Build a self-contained HTML data story using the supplied monthly counts. Include a visible chart, an accessible table with all six counts, a plain-language finding, and a limitation. Show the change in total loans from April to June without implying a causal explanation. Do not use external chart libraries.",
+      "materials": {"unit": "loans", "data": [{"month": "April", "garden": 18, "repair": 12}, {"month": "May", "garden": 24, "repair": 16}, {"month": "June", "garden": 30, "repair": 15}], "limitations": "Three months of synthetic counts; no data on weather, membership, repeat borrowers, or unmet demand."},
+      "checks": {"contains": ["April", "May", "June", "18", "12", "24", "16", "30", "15", "table"]}
+    },
+    {
+      "id": "sample-unseen-guide", "type": "files", "entrypoint": "runbook.md", "split": "test",
+      "benchmark": {"family": "troubleshooting_guide", "domain": "museum_audio", "slice": "unseen_family", "factors": ["information_order", "expression"]},
+      "brief": "Write a 170–350 word troubleshooting guide for volunteers using a museum audio kiosk. Include the general diagnostic approach, a worked symptom path, distinct branches for two symptoms, and an escalation condition. Use only the supplied safe steps.",
+      "materials": {"no_sound": ["Check that the headphone plug is fully inserted.", "Set the on-screen volume to the middle.", "Try the spare headphones if sound is still absent."], "frozen_screen": ["Wait ten seconds.", "If the screen remains frozen, press the labeled Restart audio button once."], "escalation": "If the symptom remains after its steps, record the kiosk number and contact the shift lead. Never open the cabinet or unplug cables inside it."},
+      "checks": {"min_words": 170, "max_words": 350, "contains": ["headphones", "Restart audio", "shift lead", "cabinet"]}
+    },
+    {
+      "id": "sample-unseen-slides", "type": "files", "entrypoint": "slides.md", "split": "test",
+      "benchmark": {"family": "slide_outline", "domain": "cooperative_games", "slice": "unseen_family", "factors": ["information_order", "expression"]},
+      "brief": "Create a Markdown outline for exactly four slides teaching a cooperative tabletop game. Use headings Slide 1 through Slide 4, and give each slide display text and speaker notes, totaling 180–380 words. Include the goal, complete turn sequence, one legal example turn, and both end conditions. Choose the teaching order and voice for this user.",
+      "materials": {"game": "Bridge Builders", "setup": "Two to four players share a bridge with zero planks, a supply of six planks, and a timer at six turns. No cards or dice are used.", "turn": "The active player either adds one plank from the supply to the bridge or passes without moving a plank; then the timer decreases by one. Players take turns clockwise.", "win": "The group wins immediately when the bridge reaches four planks, before decreasing the timer for that turn.", "loss": "The group loses if the timer reaches zero before the bridge has four planks."},
+      "checks": {"min_words": 180, "max_words": 380, "contains": ["Slide 1", "Slide 2", "Slide 3", "Slide 4", "Bridge Builders", "timer"]}
+    }
+  ]
+}

@@ -11,10 +11,16 @@ BUILTINS = {
     "task": {"essay": "experiment.tasks:EssayTask",
              "webpage": "experiment.tasks:WebTask",
              "files": "experiment.tasks:FileTask"},
-    "technique": {"none": "experiment.techniques:NoMemory",
+    "memory": {"none": "experiment.techniques:NoMemory",
+                  "summary": "experiment.techniques:WrittenProfile",
                   "profile": "experiment.techniques:WrittenProfile",
                   "rules": "experiment.techniques:RuleMemory",
                   "skills": "experiment.techniques:SkillMemory"},
+    "technique": {"none": "experiment.techniques:NoMemory",
+                   "summary": "experiment.techniques:WrittenProfile",
+                   "profile": "experiment.techniques:WrittenProfile",
+                   "rules": "experiment.techniques:RuleMemory",
+                   "skills": "experiment.techniques:SkillMemory"},
 }
 
 

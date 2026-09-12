@@ -20,6 +20,12 @@ def load(path: Path, seen: tuple = ()) -> dict:
     for name in includes:
         merged.update(load(path.parent / name, (*seen, path)))
     merged.update(config)  # Top-level replacement, not implicit deep merging.
+    # Keep the pre-0.3 name available to programmatic callers while configs use
+    # Keep older names available to programmatic callers while configs use the
+    # clearer ``profiling`` strategy name.
+    if "profiling" in merged:
+        merged.setdefault("memory", copy.deepcopy(merged["profiling"]))
+        merged.setdefault("technique", copy.deepcopy(merged["profiling"]))
     return merged
 
 
@@ -42,11 +48,25 @@ def resolve(config: dict) -> dict:
         raise ValueError("test_time_profiling_policy must be frozen or updating")
     if result["test_time_user_preferences"] not in {"stable", "drifting"}:
         raise ValueError("test_time_user_preferences must be stable or drifting")
-    for key in ("runtimes", "users", "tasks", "worker", "technique"):
+    # Runtime implementations are supplied separately by the CLI or Session.
+    # Keep accepting an embedded runtimes object for older callers.
+    for key in ("users", "tasks", "worker"):
         if key not in result:
             raise ValueError(f"Missing config field: {key}")
-    if not isinstance(result["runtimes"], dict) or not result["runtimes"]:
-        raise ValueError("runtimes must be a nonempty object")
+    if "profiling" not in result:
+        if "memory" in result:
+            result["profiling"] = result["memory"]
+        elif "technique" in result:
+            result["profiling"] = result["technique"]
+        else:
+            raise ValueError("Missing config field: profiling")
+    # If an older caller explicitly changed an alias, honor that override.
+    if "technique" in result and result["technique"] != result["profiling"]:
+        result["profiling"] = result["technique"]
+    elif "memory" in result and result["memory"] != result["profiling"]:
+        result["profiling"] = result["memory"]
+    result["memory"] = result["profiling"]
+    result["technique"] = result["profiling"]
     for key in ("users", "tasks"):
         entries = result[key]
         if not isinstance(entries, list) or not entries:
